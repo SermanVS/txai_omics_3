@@ -1,0 +1,29 @@
+# @package _global_
+
+# Global params
+task: regression    # Task type. Options: ["regression", "classification"]
+target: "Age"       # Target column name
+seed: 1337          # Random seed
+
+# Data params
+in_dim: null      # Number of input features
+out_dim: 1        # Output dimension
+embed_dim: 16     # Default embedding dimension
+
+# Outlier analysis params
+pyod_cont: 0.1
+
+# Augmentation params
+aug_n_samples: 500
+
+# Info params
+print_config: False         # Print config?
+
+# Directories and files params
+project_name: ${model.name}_adversarial
+base_dir: "${oc.env:PROJECT_ROOT}/data/immuno"
+data_dir: "${base_dir}"
+work_dir: "${base_dir}/models/${project_name}"
+
+# Model checkpoint path
+path_ckpt: "${base_dir}/model.ckpt"

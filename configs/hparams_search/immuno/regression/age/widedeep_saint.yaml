@@ -1,0 +1,43 @@
+# @package _global_
+
+defaults:
+  - override /hydra/sweeper: optuna
+
+# here we define Optuna hyperparameter search
+# it optimizes for value returned from function with @hydra.main decorator
+# docs: https://hydra.cc/docs/next/plugins/optuna_sweeper
+hydra:
+  sweeper:
+    _target_: hydra_plugins.hydra_optuna_sweeper.optuna_sweeper.OptunaSweeper
+    storage: null
+    study_name: null
+    n_jobs: 1
+    direction: minimize
+    n_trials: 500
+
+    # choose Optuna hyperparameter sampler
+    # docs: https://optuna.readthedocs.io/en/stable/reference/samplers.html
+    sampler:
+      _target_: optuna.samplers.TPESampler
+      seed: ${seed}
+      consider_prior: true
+      prior_weight: 1.0
+      consider_magic_clip: true
+      consider_endpoints: false
+      n_startup_trials: 50
+      n_ei_candidates: 10
+      multivariate: false
+      warn_independent_sampling: true
+
+    # define range of hyperparameters
+    # 'embed_dim' must be divisible by 'n_heads'
+    params:
+      model.optimizer_lr: tag(log, interval(0.00005, 0.001)) # tag(log, interval(0.00001, 1))
+      model.optimizer_weight_decay: tag(log, interval(0.00000001, 0.00001)) # tag(log, interval(0.00000001, 0.1))
+      model.embed_dim: choice(4, 8) # choice(2, 4)
+      model.n_heads: choice(2, 4) # choice(1, 2)
+      model.n_blocks: choice(2, 3) # choice(1, 2)
+      model.attn_dropout: interval(0.0, 0.05) # choice(0.05, 0.1, 0.2)
+      model.ff_dropout: interval(0.1, 0.3) # choice(0.05, 0.1, 0.2)
+      model.mlp_hidden_dims: choice([200, 200, 1], [200, 200, 200, 1], [400, 400, 1], [400, 200, 1]) # choice([200, 100, 1], [100, 50, 1], [200, 100, 50, 1])
+      model.mlp_dropout: interval(0.0, 0.1) # choice(0.05, 0.1, 0.15)

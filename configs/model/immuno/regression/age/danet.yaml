@@ -1,0 +1,15 @@
+name: danet
+_target_: src.models.tabular.danet.danet.DANetModel
+task: regression
+loss_type: "L1Loss"
+input_dim: ${in_dim}
+output_dim: ${out_dim}
+optimizer_lr: 0.09103819498050514
+optimizer_weight_decay: 2.1396873600065802e-05
+scheduler_step_size: 100
+scheduler_gamma: 0.8
+layer_num: 30
+base_outdim: 64
+k: 7
+virtual_batch_size: 256
+drop_rate: 0.03479968662869476

@@ -1,0 +1,39 @@
+# @package _global_
+
+defaults:
+  - override /hydra/sweeper: optuna
+
+# here we define Optuna hyperparameter search
+# it optimizes for value returned from function with @hydra.main decorator
+# docs: https://hydra.cc/docs/plugins/optuna_sweeper/
+hydra:
+  sweeper:
+    _target_: hydra_plugins.hydra_optuna_sweeper.optuna_sweeper.OptunaSweeper
+    storage: null
+    study_name: null
+    n_jobs: 1
+    direction: maximize
+    n_trials: 500
+
+    # choose Optuna hyperparameter sampler
+    # docs: https://optuna.readthedocs.io/en/stable/reference/samplers/index.html
+    sampler:
+      _target_: optuna.samplers.TPESampler
+      seed: ${seed}
+      consider_prior: true
+      prior_weight: 1.0
+      consider_magic_clip: true
+      consider_endpoints: false
+      n_startup_trials: 250
+      n_ei_candidates: 10
+      multivariate: false
+      warn_independent_sampling: true
+
+    # define range of hyperparameters
+    params:
+      model.optimizer_lr: tag(log, interval(0.0001, 0.5))
+      model.optimizer_weight_decay: tag(log, interval(0.00000001, 0.1))
+      model.mlp_hidden_dims: choice([200, 100, ${out_dim}], [100, 50, ${out_dim}], [200, 100, 50, ${out_dim}])
+      model.mlp_activation: choice('relu', 'gelu')
+      model.mlp_dropout: interval(0.01, 0.2)
+      model.mlp_linear_first: choice(False)

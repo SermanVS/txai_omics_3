@@ -1,22 +1,21 @@
-defaults:
-  - model_checkpoint
-  - early_stopping
-  - model_summary
-  - rich_progress_bar
-  - _self_
+# All PyTorch Lightning callback described here:
+# [https://pytorch-lightning.readthedocs.io/en/stable/extensions/callbacks.html]
 
-model_checkpoint:
-  dirpath: ${paths.output_dir}/checkpoints
-  filename: "epoch_{epoch:03d}"
-  monitor: "val/acc"
-  mode: "max"
-  save_last: True
-  auto_insert_metric_name: False
+early_stopping:                                         # Early stopping callback
+  _target_: pytorch_lightning.callbacks.EarlyStopping   # Instantiated object
+  monitor: "val/${optimized_metric}_pl"                 # Name of the logged metric which determines when model is improving
+  mode: ${direction}                                    # Can be "max" or "min"
+  patience: ${patience}                                 # How many epochs of not improving until training stops
+  min_delta: 0                                          # Minimum change in the monitored metric needed to qualify as an improvement
 
-early_stopping:
-  monitor: "val/acc"
-  patience: 100
-  mode: "max"
-
-model_summary:
-  max_depth: -1
+model_checkpoint:                                         # Model checkpoint callback
+  _target_: pytorch_lightning.callbacks.ModelCheckpoint   # Instantiated object
+  monitor: "val/${optimized_metric}_pl"                   # Name of the logged metric which determines when model is improving
+  mode: ${direction}                                      # Can be "max" or "min"
+  save_top_k: 1                                           # Save k best models (determined by above metric)
+  save_last: False                                        # Additionally always save model from last epoch
+  verbose: False                                          # Verbosity level
+  dirpath: ""                                             # Directory to save the model file
+  filename: "best"                                        # Checkpoint filename
+  auto_insert_metric_name: False                          # Checkpoints filenames will contain the metric name?
+  every_n_epochs: 5                                       # Number of epochs between checkpoints

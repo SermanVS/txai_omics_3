@@ -7,13 +7,13 @@ defaults:
 
 # output directory, generated dynamically on each run
 run:
-  dir: ${paths.log_dir}/${task_name}/runs/${now:%Y-%m-%d}_${now:%H-%M-%S}
+  dir: ${work_dir}/runs/${now:%Y-%m-%d_%H-%M-%S}
 sweep:
-  dir: ${paths.log_dir}/${task_name}/multiruns/${now:%Y-%m-%d}_${now:%H-%M-%S}
+  dir: ${work_dir}/multiruns/${now:%Y-%m-%d_%H-%M-%S}_${hydra.sweeper.sampler.seed}
   subdir: ${hydra.job.num}
 
-job_logging:
-  handlers:
-    file:
-      # Incorporates fix from https://github.com/facebookresearch/hydra/pull/2242
-      filename: ${hydra.runtime.output_dir}/${task_name}.log
+# You can set here environment variables that are universal for all users.
+# For system specific variables (like data paths) it's better to use .env file!
+job:
+  env_set:
+    EXAMPLE_VAR: "example_value"

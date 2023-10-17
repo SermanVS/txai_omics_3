@@ -1,20 +1,46 @@
 # --------- pytorch --------- #
-torch>=2.0.0
-torchvision>=0.15.0
-lightning>=2.0.0
-torchmetrics>=0.11.4
+torch>=1.10.0
+torchvision>=0.11.0
+pytorch-lightning==1.6.4
+torchmetrics==0.9.1
+
+# --------- models --------- #
+scikit-learn>=1.1.3
+shap==0.39.0
+xgboost==1.7.0
+catboost==1.1.1
+lightgbm==3.3.3
+scipy
+statsmodels==0.13.1
+
+# --------- data processing --------- #
+numpy
+pandas
+impyute==0.0.8
+sdv==1.4.0
+pyod==1.0.6
+missingno==0.5.1
+opentsne
 
 # --------- hydra --------- #
-hydra-core==1.3.2
+hydra-core==1.2.0
 hydra-colorlog==1.2.0
 hydra-optuna-sweeper==1.2.0
+omegaconf
+
+# --------- figures --------- #
+plotly
+seaborn
+matplotlib
+statannotations==0.5.0
+patchworklib
 
 # --------- loggers --------- #
-# wandb
-# neptune-client
-# mlflow
-# comet-ml
-# aim>=3.16.2  # no lower than 3.16.2, see https://github.com/aimhubio/aim/issues/2550
+wandb==0.11.2
+
+# --------- utils ---------- #
+tqdm
+slugify
 
 # --------- others --------- #
 rootutils       # standardizing the project root setup

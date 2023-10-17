@@ -1,0 +1,42 @@
+# @package _global_
+
+# example hyperparameter optimization of some experiment with Optuna:
+# python train.py -m hparams_search=mnist_optuna experiment=example
+
+defaults:
+  - override /hydra/sweeper: optuna
+
+# here we define Optuna hyperparameter search
+# it optimizes for value returned from function with @hydra.main decorator
+# docs: https://hydra.cc/docs/next/plugins/optuna_sweeper
+hydra:
+  sweeper:
+    _target_: hydra_plugins.hydra_optuna_sweeper.optuna_sweeper.OptunaSweeper
+    storage: null
+    study_name: null
+    n_jobs: 1
+    direction: minimize
+    n_trials: 500
+
+    # choose Optuna hyperparameter sampler
+    # docs: https://optuna.readthedocs.io/en/stable/reference/samplers.html
+    sampler:
+      _target_: optuna.samplers.TPESampler
+      seed: ${seed}
+      consider_prior: true
+      prior_weight: 1.0
+      consider_magic_clip: true
+      consider_endpoints: false
+      n_startup_trials: 50
+      n_ei_candidates: 10
+      multivariate: false
+      warn_independent_sampling: true
+
+    # define range of hyperparameters
+    params:
+      model.optimizer_lr: tag(log, interval(0.01, 0.3)) # tag(log, interval(0.00001, 1))
+      model.optimizer_weight_decay: tag(log, interval(0.0000001, 0.0001)) # tag(log, interval(0.00000001, 0.1))
+      model.layer_num: int(range(10, 45, step=1)) # int(range(8, 32, step=1))
+      model.base_outdim: choice(64, 128) #  choice(32, 64, 96)
+      model.k: choice(4, 5, 6) # choice(4, 5, 6)
+      model.drop_rate: interval(0.05, 0.15) # choice(0.0, 0.1)

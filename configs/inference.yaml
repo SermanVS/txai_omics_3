@@ -1,0 +1,14 @@
+# @package _global_
+
+# specify here defaults
+defaults:
+  - _self_
+  - experiment: immuno/regression/age_inference        # Global parameters of experiment
+  - datamodule: immuno/regression/age                  # Information about dataset
+  - trainer: null                           # Run configuration for DNN models
+  - callbacks: null                         # Callbacks for DNN models
+  - logger: none                            # Loggers for DNN models
+  - hydra: default                          # Output paths for logs
+
+  - model: immuno/regression/age/widedeep_ft_transformer        # Model
+  - hparams_search: null                    # Model-specific hyperparameters

@@ -1,0 +1,43 @@
+# @package _global_
+
+defaults:
+  - override /hydra/sweeper: optuna
+
+# here we define Optuna hyperparameter search
+# it optimizes for value returned from function with @hydra.main decorator
+# docs: https://hydra.cc/docs/plugins/optuna_sweeper/
+hydra:
+  sweeper:
+    _target_: hydra_plugins.hydra_optuna_sweeper.optuna_sweeper.OptunaSweeper
+    storage: null
+    study_name: null
+    n_jobs: 1
+    direction: maximize
+    n_trials: 500
+
+    # choose Optuna hyperparameter sampler
+    # docs: https://optuna.readthedocs.io/en/stable/reference/samplers/index.html
+    sampler:
+      _target_: optuna.samplers.TPESampler
+      seed: ${seed}
+      consider_prior: true
+      prior_weight: 1.0
+      consider_magic_clip: true
+      consider_endpoints: false
+      n_startup_trials: 100
+      n_ei_candidates: 10
+      multivariate: false
+      warn_independent_sampling: true
+
+    # define range of hyperparameters
+    params:
+      model.optimizer_lr: tag(log, interval(0.005, 0.15))                    # tag(log, interval(0.00001, 1))
+      model.optimizer_weight_decay: tag(log, interval(0.00000001, 0.0001))    # tag(log, interval(0.0000001, 0.01))
+      model.n_steps: choice(2, 3, 4, 5)                                          # choice(2, 3, 4, 5)
+      model.attn_dim: choice(16, 20, 24, 32)                               # choice(2, 4, 8, 12, 16, 20)
+      model.dropout: interval(0.0, 0.3)                                       # interval(0.0, 0.2)
+      model.n_glu_step_dependent:  choice(1, 2, 3)                               # choice(1, 2, 3)
+      model.n_glu_shared: choice(3, 4)                                        # choice(2, 3, 4)
+      model.momentum: interval(0.05, 0.3)                                     # interval(0.01, 0.25)
+      model.gamma: interval(1.10, 1.35)                                       # interval(1.1, 1.5)
+      model.mask_type: choice(entmax)                                         # choice(sparsemax, entmax)

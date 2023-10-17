@@ -1,0 +1,14 @@
+# @package _global_
+
+# specify here defaults
+defaults:
+  - _self_
+  - experiment: immuno/regression/age_trn_val_tst         # Global parameters of experiment. Options: [dnam/classification/parkinson_trn_val_tst, immuno/regression/age_trn_val_tst]
+  - datamodule: immuno/regression/age                     # Information about dataset. Options: [immuno/regression/parkinson_trn_val_tst, immuno/regression/age]
+  - trainer: gpu                                  # Run configuration for DNN models
+  - callbacks: default # none                     # Callbacks for DNN models
+  - logger: none                                  # Loggers for DNN models
+  - hydra: default                                # Output paths for logs
+
+  - model: immuno/regression/age/widedeep_tab_net                # Model
+  - hparams_search: immuno/regression/age/widedeep_tab_net       # Model-specific hyperparameters
