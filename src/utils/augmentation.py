@@ -51,7 +51,7 @@ from src.utils.outliers.iqr import add_iqr_outs_to_df, plot_iqr_outs, plot_iqr_o
 from src.utils.outliers.pyod import add_pyod_outs_to_df, plot_pyod_outs, plot_pyod_outs_reg
 
 
-def plot_column_shapes(df_col_shapes, color, title, path):
+def plot_aug_column_shapes(df_col_shapes, color, title, path):
     fig = plt.figure(figsize=(3, 5))
     sns.set_theme(style='whitegrid')
     barplot = sns.barplot(
@@ -71,7 +71,7 @@ def plot_column_shapes(df_col_shapes, color, title, path):
     plt.close(fig)
 
 
-def plot_column_pair_trends_and_correlations(feats_to_plot, df_col_pair_trends, title_pair_trends, path):
+def plot_aug_column_pair_trends_and_correlations(feats_to_plot, df_col_pair_trends, title_pair_trends, path):
     df_corr_mtx = pd.DataFrame(
         data=np.zeros(shape=(len(feats_to_plot), len(feats_to_plot))),
         index=feats_to_plot,
@@ -145,7 +145,7 @@ def plot_column_pair_trends_and_correlations(feats_to_plot, df_col_pair_trends, 
     plt.clf()
 
 
-def plot_reg_in_reduced_dimension(df, df_aug, dim_red_labels, path, title, ):
+def plot_aug_in_reduced_dimension(df, df_aug, dim_red_labels, path, title, cont_col='Error'):
     df_ori_aug = pd.concat([df, df_aug])
     for m in dim_red_labels:
         n_bins = 25
@@ -173,15 +173,18 @@ def plot_reg_in_reduced_dimension(df, df_aug, dim_red_labels, path, title, ):
         xs_ids = np.floor((xs - x_min) / (x_shift + 1e-10)).astype(int)
         ys = df_aug.loc[:, dim_red_labels[m][1]].values
         ys_ids = np.floor((ys - y_min) / (y_shift + 1e-10)).astype(int)
-        zs = df_aug.loc[:, "Error"].values
+        zs = df_aug.loc[:, cont_col].values
         for d_id in range(len(xs_ids)):
             df_heatmap_sum.iat[xs_ids[d_id], ys_ids[d_id]] += zs[d_id]
             df_heatmap_cnt.iat[xs_ids[d_id], ys_ids[d_id]] += 1
-        df_heatmap = pd.DataFrame(data=df_heatmap_sum.values / df_heatmap_cnt.values,
-                                  columns=df_heatmap_sum.columns, index=df_heatmap_sum.index)
+        df_heatmap = pd.DataFrame(
+            data=df_heatmap_sum.values / df_heatmap_cnt.values,
+            columns=df_heatmap_sum.columns,
+            index=df_heatmap_sum.index
+        )
         df_heatmap.to_excel(f"{path}/{m}_heatmap.xlsx")
 
-        norm = plt.Normalize(df_ori_aug["Error"].min(), df_ori_aug["Error"].max())
+        norm = plt.Normalize(df_ori_aug[cont_col].min(), df_ori_aug[cont_col].max())
         sm = plt.cm.ScalarMappable(cmap="spring", norm=norm)
         sm.set_array([])
         fig, ax = plt.subplots(figsize=(5, 4))
@@ -190,14 +193,14 @@ def plot_reg_in_reduced_dimension(df, df_aug, dim_red_labels, path, title, ):
         ax.imshow(
             X=df_heatmap.transpose().iloc[::-1].values,
             extent=[x_min, x_max, y_min, y_max],
-            vmin=df_ori_aug["Error"].min(),
-            vmax=df_ori_aug["Error"].max(),
+            vmin=df_ori_aug[cont_col].min(),
+            vmax=df_ori_aug[cont_col].max(),
             aspect=x_shift / y_shift,
             cmap="spring",
             alpha=1.0
         )
 
-        scatter_colors = {sample: colors.rgb2hex(sm.to_rgba(row["Error"])) for sample, row in df.iterrows()}
+        scatter_colors = {sample: colors.rgb2hex(sm.to_rgba(row[cont_col])) for sample, row in df.iterrows()}
         scatter = sns.scatterplot(
             data=df,
             x=dim_red_labels[m][0],
@@ -212,7 +215,7 @@ def plot_reg_in_reduced_dimension(df, df_aug, dim_red_labels, path, title, ):
             ax=ax
         )
         scatter.get_legend().remove()
-        fig.colorbar(sm, label="Error")
+        fig.colorbar(sm, label=cont_col)
         plt.title(f'{title}', y=1.2, fontsize=14)
 
         legend_handles = [
@@ -226,7 +229,7 @@ def plot_reg_in_reduced_dimension(df, df_aug, dim_red_labels, path, title, ):
         plt.close(fig)
 
 
-def plot_reg_feats_dist(df, df_aug, feats, target, synt_name, color, path):
+def plot_aug_reg_feats_dist(df, df_aug, feats, target, synt_name, color, path):
     df_ori_aug = pd.concat([df, df_aug])
 
     pw_brick_kdes = {}
@@ -314,3 +317,103 @@ def plot_reg_feats_dist(df, df_aug, feats, target, synt_name, color, path):
     plt.savefig(f"{path}/target_kde.png", bbox_inches='tight', dpi=200)
     plt.savefig(f"{path}/target_kde.pdf", bbox_inches='tight')
     plt.close(fig)
+
+
+def plot_aug_cls_feats_dist(df, df_aug, synt_name, color, target, classes_dict, df_stat, path):
+    df_ori_aug = pd.concat([df, df_aug])
+
+    countplots = {}
+    kdeplots = {}
+    for cl_name, cl_id in classes_dict.items():
+        countplots[cl_name] = pw.Brick(figsize=(3, 1))
+        sns.set_theme(style='whitegrid')
+        countplot = sns.countplot(
+            data=df_ori_aug.loc[df_ori_aug[target] == cl_id, :],
+            y='Data',
+            edgecolor='black',
+            palette={'Real': 'grey', synt_name: color},
+            orient='h',
+            order=['Real', synt_name],
+            ax=countplots[cl_name]
+        )
+        countplots[cl_name].bar_label(countplot.containers[0])
+        countplots[cl_name].set_xlabel("Count")
+        countplots[cl_name].set_title(f"{cl_name} samples")
+
+        kdeplots[cl_name] = pw.Brick(figsize=(4, 2))
+        sns.set_theme(style='whitegrid')
+        kde = sns.kdeplot(
+            data=df_ori_aug.loc[df_ori_aug[target] == cl_id, :],
+            x=f"Prob {list(classes_dict.keys())[-1]}",
+            hue='Data',
+            linewidth=2,
+            palette={'Real': 'grey', synt_name: color},
+            hue_order=['Real', synt_name],
+            fill=True,
+            common_norm=False,
+            cut=0,
+            ax=kdeplots[cl_name]
+        )
+        sns.move_legend(kdeplots[cl_name], "upper center")
+        kdeplots[cl_name].set_title(f"{cl_name} samples")
+
+    df_stat = df_stat.loc[df_stat['Metric'] == "KSComplement", :].copy()
+    df_stat.rename(columns={'Score': "KSComplement"}, inplace=True)
+
+    brick_scores = pw.Brick(figsize=(7.5, 1.75))
+    sns.set_theme(style='whitegrid')
+    kdeplot = sns.kdeplot(
+        data=df_stat,
+        x='KSComplement',
+        color='darkgreen',
+        linewidth=2,
+        cut=0,
+        fill=True,
+        ax=brick_scores
+    )
+    brick_scores.set_title('Features Distribution Differences')
+
+    n_features = 5
+    feats_dict = {
+        'Top Features': list(df_stat.index[0:n_features]),
+        'Bottom Features': list(df_stat.index[-n_features - 1:-1][::-1])
+    }
+    brick_feats_violins = {}
+    for feats_set in feats_dict:
+        df_fig = df_ori_aug.loc[:, feats_dict[feats_set] + ['Data']].copy()
+        df_fig = df_fig.melt(
+            id_vars=['Data'],
+            value_vars=feats_dict[feats_set],
+            var_name='Feature',
+            value_name='Value')
+        df_fig['Feature'].replace(
+            {x: f"{x}\nScore: {df_stat.at[x, 'KSComplement']:0.2f}" for x in feats_dict[feats_set]},
+            inplace=True
+        )
+
+        brick_feats_violins[feats_set] = pw.Brick(figsize=(2.5, 3))
+        sns.set_theme(style='whitegrid')
+        violin = sns.violinplot(
+            data=df_fig,
+            x='Value',
+            y='Feature',
+            orient='h',
+            hue='Data',
+            split=True,
+            linewidth=1,
+            palette={'Real': 'grey', synt_name: color},
+            hue_order=['Real', synt_name],
+            cut=0,
+            inner="quart",
+            ax=brick_feats_violins[feats_set]
+        )
+        brick_feats_violins[feats_set].set_title(feats_set)
+
+    pw_fig_row_1 = pw.stack(list(countplots.values()), operator="|")
+    pw_fig_row_2 = pw.stack(list(kdeplots.values()), operator="|")
+
+    pw_fig = pw_fig_row_1 / pw_fig_row_2 / brick_scores / (brick_feats_violins['Top Features'] | brick_feats_violins['Bottom Features'])
+    pw_fig.savefig(f"{path}/feats.png", bbox_inches='tight', dpi=200)
+    pw_fig.savefig(f"{path}/feats.pdf", bbox_inches='tight')
+    pw.clear()
+

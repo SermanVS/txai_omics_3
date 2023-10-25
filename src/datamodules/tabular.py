@@ -135,7 +135,7 @@ class TabularDataModule(LightningDataModule):
         df_feats_con = pd.read_excel(self.feats_con_fn, index_col=0)
         self.feats_con = df_feats_con.index.values.tolist()
         self.feats_labels = {}
-        for f in  self.feats_con:
+        for f in self.feats_con:
             if self.feats_labels_col in df_feats_con.columns:
                 self.feats_labels[f] = df_feats_con.at[f, self.feats_labels_col]
             else:

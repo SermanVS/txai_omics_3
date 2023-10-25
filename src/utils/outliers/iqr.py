@@ -265,4 +265,3 @@ def plot_iqr_outs_cls(df, path, col_class, col_pred, col_real, cols_prob, palett
     pw_fig.savefig(f"{path}/bar_count_kde.pdf", bbox_inches='tight')
     pw.clear()
 
-
