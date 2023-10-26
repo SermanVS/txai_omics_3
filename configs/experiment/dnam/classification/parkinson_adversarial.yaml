@@ -14,8 +14,18 @@ embed_dim: 16     # Default embedding dimension
 # Outlier analysis params
 pyod_cont: 0.1
 
+# Attacks params
+attacks: True
+
 # Augmentation params
+augmentations: True
 aug_n_samples: 10000
+
+# Outliers detections params
+outliers: True
+
+# Confidence calculation params
+confidence: True
 
 # Info params
 print_config: False         # Print config?
