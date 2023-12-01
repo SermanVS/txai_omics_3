@@ -1,54 +1,9 @@
 import numpy as np
 import pandas as pd
-import torch
-import hydra
-from omegaconf import DictConfig
-from pytorch_lightning import seed_everything
-from src.datamodules.tabular import TabularDataModule
-from src.utils import utils
 import matplotlib.pyplot as plt
 import seaborn as sns
-from matplotlib import colors
 import matplotlib.lines as mlines
 import patchworklib as pw
-from src.tasks.routines import eval_regression
-import plotly.express as px
-from src.tasks.regression.shap import explain_shap
-from src.models.tabular.base import get_model_framework_dict
-from src.tasks.routines import plot_reg_error_dist, calc_confidence
-from src.tasks.metrics import get_reg_metrics
-import pickle
-from pathlib import Path
-from tqdm import tqdm
-from sdv.metadata import SingleTableMetadata
-from sdv.lite import SingleTablePreset
-from sdv.single_table import GaussianCopulaSynthesizer, CTGANSynthesizer, TVAESynthesizer, CopulaGANSynthesizer
-from sdv.evaluation.single_table import evaluate_quality
-from sklearn.decomposition import PCA
-from sklearn.manifold import Isomap
-from openTSNE import TSNE
-
-from pyod.models.ecod import ECOD
-from pyod.models.copod import COPOD
-from pyod.models.sos import SOS
-from pyod.models.sampling import Sampling
-from pyod.models.gmm import GMM
-from pyod.models.mcd import MCD
-from pyod.models.lmdd import LMDD
-from pyod.models.lof import LOF
-from pyod.models.cof import COF
-from pyod.models.cblof import CBLOF
-from pyod.models.knn import KNN
-from pyod.models.sod import SOD
-from pyod.models.iforest import IForest
-from pyod.models.inne import INNE
-from pyod.models.loda import LODA
-from pyod.models.vae import VAE
-from pyod.models.deep_svdd import DeepSVDD
-from pyod.models.lunar import LUNAR
-
-from src.utils.outliers.iqr import add_iqr_outs_to_df, plot_iqr_outs, plot_iqr_outs_reg
-from src.utils.outliers.pyod import add_pyod_outs_to_df, plot_pyod_outs, plot_pyod_outs_reg
 
 
 def plot_atk_reg_in_reduced_dimension(df, df_atk, dim_red_labels, path, title):
