@@ -32,7 +32,6 @@ def get_cls_prob_metrics(num_classes):
 
 def get_reg_metrics():
     metrics = {
-        'cosine_similarity': (torchmetrics.CosineSimilarity(), 'max'),
         'mean_absolute_error': (torchmetrics.MeanAbsoluteError(), 'min'),
         'mean_absolute_percentage_error': (torchmetrics.MeanAbsolutePercentageError(), 'min'),
         'mean_squared_error': (torchmetrics.MeanSquaredError(), 'min'),

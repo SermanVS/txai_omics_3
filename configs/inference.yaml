@@ -5,7 +5,7 @@ defaults:
   - _self_
   - experiment: immuno/regression/age_inference        # Global parameters of experiment
   - datamodule: immuno/regression/age                  # Information about dataset
-  - trainer: null                           # Run configuration for DNN models
+  - trainer: cpu                           # Run configuration for DNN models
   - callbacks: null                         # Callbacks for DNN models
   - logger: none                            # Loggers for DNN models
   - hydra: default                          # Output paths for logs

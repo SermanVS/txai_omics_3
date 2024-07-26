@@ -164,8 +164,8 @@ class BaseModel(pl.LightningModule):
         logs.update(non_logs)
         return logs
 
-    def training_epoch_end(self, outputs: List[Any]):
-        pass
+    def on_train_epoch_end(self):
+        self.on_epoch_end()
 
     def validation_step(self, batch: Dict, batch_idx: int):
         loss, logs, non_logs = self.step(batch, "val")
@@ -174,8 +174,8 @@ class BaseModel(pl.LightningModule):
         logs.update(non_logs)
         return logs
 
-    def validation_epoch_end(self, outputs: List[Any]):
-        pass
+    def on_validation_epoch_end(self):
+        self.on_epoch_end()
 
     def test_step(self, batch: Dict, batch_idx: int):
         loss, logs, non_logs = self.step(batch, "tst")
@@ -184,8 +184,8 @@ class BaseModel(pl.LightningModule):
         logs.update(non_logs)
         return logs
 
-    def test_epoch_end(self, outputs: List[Any]):
-        pass
+    def on_test_epoch_end(self):
+        self.on_epoch_end()
 
     def predict_step(self, batch: Dict, batch_idx):
         out = self.forward(batch)

@@ -1,6 +1,7 @@
 # All Trainer parameters available here:
 # [https://pytorch-lightning.readthedocs.io/en/stable/common/trainer.html]
 _target_: pytorch_lightning.Trainer   # Instantiated object
-gpus: 0                               # Number of GPUs to train on
+accelerator: cpu
+devices: 1
 min_epochs: 1                         # Force training for at least these many epochs
 max_epochs: ${max_epochs}             # Stop training once this number of epochs is reached

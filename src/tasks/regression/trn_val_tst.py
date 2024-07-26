@@ -9,7 +9,7 @@ from pytorch_lightning import (
 )
 import matplotlib.pyplot as plt
 import seaborn as sns
-from pytorch_lightning.loggers import LightningLoggerBase
+from pytorch_lightning.loggers.logger import Logger
 import xgboost as xgb
 from catboost import CatBoost, Pool
 import lightgbm
@@ -139,7 +139,7 @@ def trn_val_tst_regression(config: DictConfig) -> Optional[float]:
                         callbacks.append(hydra.utils.instantiate(cb_conf))
 
         # Init lightning loggers
-        loggers: List[LightningLoggerBase] = []
+        loggers: List[Logger] = []
         if "logger" in config:
             for _, lg_conf in config.logger.items():
                 if "_target_" in lg_conf:
