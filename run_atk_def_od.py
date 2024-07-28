@@ -24,6 +24,7 @@ def main(config: DictConfig):
     # Imports should be nested inside @hydra.main to optimize tab completion
     # Read more here: https://github.com/facebookresearch/hydra/issues/934
     from src.tasks.regression.atk_def_od import atk_def_od_regression
+    from src.tasks.classification.atk_def_od import atk_def_od_classification
     from src.utils import utils
     import torch
 
@@ -47,8 +48,8 @@ def main(config: DictConfig):
 
     if config.task == "regression":
         return atk_def_od_regression(config)
-    # elif config.task == "classification":
-    #     return adversarial_classification(config)
+    elif config.task == "classification":
+        return atk_def_od_classification(config)
     else:
         raise ValueError(f"Unsupported task: {config.task}")
 

@@ -124,7 +124,7 @@ class BaseModel(pl.LightningModule):
 
         logs = {"loss": loss}
         non_logs = {}
-        if self.hparams.task == "classification":
+        if self.hparams.task == "classification": # type: ignore
             probs = torch.softmax(out, dim=1)
             preds = torch.argmax(out, dim=1)
             non_logs["preds"] = preds

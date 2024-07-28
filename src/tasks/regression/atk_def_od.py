@@ -265,8 +265,8 @@ def atk_def_od_regression(config: DictConfig):
             annot_kws={"size": 12},
             ax=ax
         )
-        ax.set_xlabel('Outliers Detection Algorithms')
-        ax.set_ylabel('Thresholding Algorithms')
+        ax.set_ylabel('Outliers Detection Algorithms')
+        ax.set_xlabel('Thresholding Algorithms')
         heatmap_pos = heatmap.get_position()
         ax.figure.axes[-1].set_title("Outliers' percentage")
         ax.figure.axes[-1].tick_params()
@@ -359,7 +359,6 @@ def atk_def_od_regression(config: DictConfig):
 
                 df_atk = df.loc[:, [target]].copy()
                 df_atk.loc[:, feats] = X_atk
-                df_atk.index += f'_{attack_name}_{eps_raw:0.4f}'
 
                 df_atk["Prediction"] = model(torch.from_numpy(np.float32(df_atk.loc[:, feats].values))).cpu().detach().numpy().ravel()
                 df_atk["Error"] = df_atk["Prediction"] - df_atk[target]
@@ -459,8 +458,8 @@ def atk_def_od_regression(config: DictConfig):
                     annot_kws={"size": 12},
                     ax=ax
                 )
-                ax.set_xlabel('Outliers Detection Algorithms')
-                ax.set_ylabel('Thresholding Algorithms')
+                ax.set_ylabel('Outliers Detection Algorithms')
+                ax.set_xlabel('Thresholding Algorithms')
                 heatmap_pos = heatmap.get_position()
                 ax.figure.axes[-1].set_title("Outliers' percentage")
                 ax.figure.axes[-1].tick_params()
