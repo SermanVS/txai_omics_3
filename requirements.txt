@@ -1,53 +1,53 @@
-# --------- pytorch --------- #
-torch>=1.10.0
-torchvision>=0.11.0
-pytorch-lightning==1.6.4
-torchmetrics==0.9.1
+matplotlib==3.7.3
+black==21.12b0
 
-# --------- models --------- #
-scikit-learn>=1.1.3
-shap==0.39.0
-xgboost==1.7.0
-catboost==1.1.1
-lightgbm==3.3.3
-scipy
-statsmodels==0.13.1
-
-# --------- data processing --------- #
-numpy
-pandas
-impyute==0.0.8
-sdv==1.4.0
-pyod==1.0.6
-missingno==0.5.1
-opentsne
-
-# --------- hydra --------- #
+python-dotenv==1.0.1
 hydra-core==1.2.0
 hydra-colorlog==1.2.0
 hydra-optuna-sweeper==1.2.0
-omegaconf
+pyrootutils==1.0.4
 
-# --------- figures --------- #
-plotly
-seaborn
-matplotlib
-statannotations==0.5.0
-patchworklib
+scipy==1.12.0
 
-# --------- loggers --------- #
-wandb==0.11.2
+numpy==1.26.4
 
-# --------- utils ---------- #
-tqdm
-slugify
+pytorch-tabular==1.1.0
 
-# --------- others --------- #
-rootutils       # standardizing the project root setup
-pre-commit      # hooks for applying linters on commit
-rich            # beautiful text formatting in terminal
-pytest          # tests
-# sh            # for running bash commands in some tests (linux/macos only)
+pytorch-widedeep==1.1.1
 
-# --------- attacks --------- #
-adversarial-robustness-toolbox
+xgboost==2.1.0
+catboost==1.2.5
+lightgbm==3.3.0
+
+python-slugify==8.0.4
+
+seaborn==0.12.2
+distinctipy==1.3.4
+
+jupyter==1.0.0
+
+plotly==5.22.0
+
+patchworklib==0.6.4
+
+shap==0.46.0
+lime==0.2.0.1
+
+adversarial-robustness-toolbox==1.18.1
+
+pyod==2.0.1
+pythresh==0.3.6
+
+combo==0.1.3
+geomstats==2.7.0
+pyclustering==0.10.1.2
+ruptures==1.1.9
+
+scikit-lego==0.9.1
+
+opentsne==1.0.1
+sdv==1.15.0
+
+wandb==0.17.4
+
+openpyxl==3.1.5
