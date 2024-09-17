@@ -4,16 +4,17 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "txai_omics_3"
-version = "0.1.2"
+version = "0.1.3"
 description = "A library with several BioAge prediction models."
 readme = "README.md"
 authors = [
   "Igor Yusipov <yusipov.igor@itmm.unn.ru>"
 ]
 maintainers = [
-    "Igor Yusipov <yusipov.igor@itmm.unn.ru>"
+    "Igor Yusipov <yusipov.igor@itmm.unn.ru>",
+    "Sergei Tikhomirov <stikhomirov@itmm.unn.ru>"
 ]
-repository = "https://github.com/GillianGrayson/txai_omics_3"
+repository = "https://github.com/SermanVS/txai_omics_3"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.12"
