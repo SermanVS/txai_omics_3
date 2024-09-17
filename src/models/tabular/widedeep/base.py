@@ -1,5 +1,5 @@
 import torch
-from src.models.tabular.base import BaseModel
+from ..base import BaseModel
 
 
 class WDBaseModel(BaseModel):

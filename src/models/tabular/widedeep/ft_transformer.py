@@ -1,4 +1,4 @@
-from src.models.tabular.widedeep.base import WDBaseModel
+from .base import WDBaseModel
 from pytorch_widedeep.models import FTTransformer
 
 
