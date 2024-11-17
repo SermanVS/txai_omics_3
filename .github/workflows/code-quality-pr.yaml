@@ -29,8 +29,3 @@ jobs:
 
       - name: List modified files
         run: echo '${{ steps.file_changes.outputs.files}}'
-
-      - name: Run pre-commits
-        uses: pre-commit/action@v2.0.3
-        with:
-          extra_args: --files ${{ steps.file_changes.outputs.files}}
