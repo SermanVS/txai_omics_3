@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "txai_omics_3"
-version = "0.1.11"
+version = "0.1.12"
 description = "A library with several BioAge prediction models."
 readme = "README.md"
 authors = [
