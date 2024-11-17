@@ -5,7 +5,7 @@ import unittest
 class TestModelInitFunction(unittest.TestCase):
     def test_query(self):
         # Model
-        fn_model = f"../data/immuno/model.ckpt"
+        fn_model = f"data/immuno/model.ckpt"
         model = WDFTTransformerModel.load_from_checkpoint(fn_model)
         return True
 
