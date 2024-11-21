@@ -12,6 +12,7 @@ def get_file(file):
 
 FN_SHAP = get_file('shap.pickle')
 FN_CHECKPOINT = get_file('model.ckpt')
+TRAIN_DATA_PATH = get_file('data.xlsx')
 
 
 class WDFTTransformerModel(WDBaseModel):
