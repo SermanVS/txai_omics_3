@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "txai_omics_3"
-version = "0.1.12"
+version = "0.1.13"
 description = "A library with several BioAge prediction models."
 readme = "README.md"
 authors = [
@@ -17,11 +17,12 @@ maintainers = [
 repository = "https://github.com/SermanVS/txai_omics_3"
 
 [tool.poetry.dependencies]
-python = "3.11"
+python = "3.11.*"
 numpy = "1.26.4"
 torch = [
   {url = "https://download.pytorch.org/whl/cpu/torch-2.3.1%2Bcpu-cp311-cp311-linux_x86_64.whl", markers = "sys_platform == 'linux'"},
-  {url = "https://download.pytorch.org/whl/cpu/torch-2.3.1%2Bcpu-cp311-cp311-win_amd64.whl", markers = "sys_platform == 'win32'"}
+  {url = "https://download.pytorch.org/whl/cpu/torch-2.3.1%2Bcpu-cp311-cp311-win_amd64.whl", markers = "sys_platform == 'win32'"},
+  {url = "https://download.pytorch.org/whl/cpu/torch-2.3.1-cp311-none-macosx_11_0_arm64.whl", markers = "sys_platform == 'macos'"}
 ]
 torchvision = "0.18.1"
 pytorch-tabular = "1.1.0"

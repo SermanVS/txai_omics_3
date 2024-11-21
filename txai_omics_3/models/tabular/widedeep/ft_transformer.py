@@ -1,5 +1,17 @@
 from .base import WDBaseModel
 from pytorch_widedeep.models import FTTransformer
+from pathlib import Path
+import importlib.resources as rc
+import data.immuno
+
+data_dir = rc.files(data.immuno)
+
+def get_file(file):
+    with rc.as_file(data_dir.joinpath(file)) as path:
+        return path
+
+FN_SHAP = get_file('shap.pickle')
+FN_CHECKPOINT = get_file('model.ckpt')
 
 
 class WDFTTransformerModel(WDBaseModel):
