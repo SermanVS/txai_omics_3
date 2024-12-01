@@ -21,9 +21,9 @@ def main(config: DictConfig):
 
     # Imports should be nested inside @hydra.main to optimize tab completion
     # Read more here: https://github.com/facebookresearch/hydra/issues/934
-    from src.tasks.regression.adversarial import adversarial_regression
-    from src.tasks.classification.adversarial import adversarial_classification
-    from src.utils import utils
+    from txai_omics_3.tasks.regression.adversarial import adversarial_regression
+    from txai_omics_3.tasks.classification.adversarial import adversarial_classification
+    from txai_omics_3.utils import utils
     import torch
 
     # A couple of optional utilities:
